@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* This makes the map visible */
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+}
