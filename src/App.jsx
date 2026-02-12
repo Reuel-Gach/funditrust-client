@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Shield } from 'lucide-react';
-import API_URL from './config';
+import { API_URL } from "./config";
 
 // Components
 import TrustCard from './components/TrustCard';
