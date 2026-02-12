@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Star, CheckCircle, Smartphone, Loader2 } from 'lucide-react';
-import API_URL from "../config";
+import { API_URL } from "../config";
 
 const ReviewModal = ({ fundi, onClose }) => {
   const [step, setStep] = useState(1); 
