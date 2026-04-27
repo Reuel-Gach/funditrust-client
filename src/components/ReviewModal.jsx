@@ -27,7 +27,7 @@ const ReviewModal = ({ fundi, onClose }) => {
     setPaymentError('');
 
     try {
-      const res = await fetch('${API_URL}/api/mpesa', {
+      const res = await fetch(`${API_URL}/api/mpesa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone, amount }) // ✅ Sends the typed amount
