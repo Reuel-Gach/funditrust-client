@@ -85,7 +85,7 @@ function App() {
   }, []);
 
   // --- 4. FILTER LOGIC ---
-  const visibleFundis = fundis.filter((fundi) => {
+  {visibleFundis.filter(f => f.lat && f.lng).map((fundi) => (
     const query = searchQuery.toLowerCase();
     return (
       fundi.name.toLowerCase().includes(query) || 
