@@ -78,7 +78,7 @@ function App() {
 
   // --- 3. FETCH REAL DATA ---
   useEffect(() => {
-    fetch('${API_URL}/api/fundis')
+    fetch(`${API_URL}/api/fundis`)
       .then(res => res.json())
       .then(data => setFundis(data))
       .catch(err => console.error("Error fetching fundis:", err));
