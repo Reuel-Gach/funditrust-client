@@ -1,7 +1,10 @@
+Reviewmodal · JSX
+Copy
+
 import { useState } from 'react';
 import { X, Star, CheckCircle, Smartphone, Loader2 } from 'lucide-react';
 import { API_URL } from "../config";
-
+ 
 const ReviewModal = ({ fundi, onClose }) => {
   const [step, setStep] = useState(1); 
   
@@ -15,17 +18,17 @@ const ReviewModal = ({ fundi, onClose }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [mpesaCode, setMpesaCode] = useState(''); 
-
+ 
   const handlePayment = async (e) => {
     e.preventDefault();
     if (!amount || amount < 1) {
       alert("Please enter a valid amount");
       return;
     }
-
+ 
     setIsProcessing(true);
     setPaymentError('');
-
+ 
     try {
       const res = await fetch(`${API_URL}/api/mpesa`, {
         method: 'POST',
@@ -33,7 +36,7 @@ const ReviewModal = ({ fundi, onClose }) => {
         body: JSON.stringify({ phone, amount }) // ✅ Sends the typed amount
       });
       const data = await res.json();
-
+ 
       if (res.ok) {
         setMpesaCode(data.checkoutRequestID || "PENDING"); 
         setStep(2); 
@@ -46,13 +49,13 @@ const ReviewModal = ({ fundi, onClose }) => {
     }
     setIsProcessing(false);
   };
-
+ 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
     if (rating === 0) { alert("Please click a star rating!"); return; }
-
+ 
     try {
-      const res = await fetch(`http://localhost:5000/api/reviews/${fundi.id}`, {
+      const res = await fetch(`${API_URL}/api/reviews/${fundi.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ rating, comment, mpesaCode })
@@ -64,14 +67,14 @@ const ReviewModal = ({ fundi, onClose }) => {
       }
     } catch (err) { alert("Failed to submit review"); }
   };
-
+ 
   return (
     <div className="fixed inset-0 z-[5000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
       <div className="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl relative">
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-red-500">
           <X size={24} />
         </button>
-
+ 
         {step === 1 && (
           <div>
             <div className="text-center mb-6">
@@ -81,7 +84,7 @@ const ReviewModal = ({ fundi, onClose }) => {
               <h2 className="text-2xl font-bold text-gray-900">Pay {fundi.name}</h2>
               <p className="text-gray-500 text-sm">Enter amount & phone to verify.</p>
             </div>
-
+ 
             <form onSubmit={handlePayment} className="space-y-4">
               
               {/* ✅ NEW: Amount Input Field */}
@@ -99,7 +102,7 @@ const ReviewModal = ({ fundi, onClose }) => {
                   />
                 </div>
               </div>
-
+ 
               <div>
                 <label className="text-sm font-bold text-gray-700 ml-1">M-Pesa Number</label>
                 <input 
@@ -111,13 +114,13 @@ const ReviewModal = ({ fundi, onClose }) => {
                   className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl mt-1 text-lg font-medium outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
-
+ 
               {paymentError && (
                 <p className="text-red-500 text-sm font-bold bg-red-50 p-3 rounded-lg text-center">
                   {paymentError}
                 </p>
               )}
-
+ 
               <button 
                 disabled={isProcessing}
                 className="w-full bg-[#25D366] text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-2 disabled:opacity-70"
@@ -127,7 +130,7 @@ const ReviewModal = ({ fundi, onClose }) => {
             </form>
           </div>
         )}
-
+ 
         {step === 2 && (
           <div className="animate-in slide-in-from-right duration-300">
             <div className="text-center mb-6">
@@ -137,7 +140,7 @@ const ReviewModal = ({ fundi, onClose }) => {
               <h2 className="text-2xl font-bold text-gray-900">Payment Sent!</h2>
               <p className="text-gray-500 text-sm">Check your phone to complete PIN.</p>
             </div>
-
+ 
             <form onSubmit={handleSubmitReview} className="space-y-4">
               <div className="flex justify-center gap-2 py-2">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -162,5 +165,5 @@ const ReviewModal = ({ fundi, onClose }) => {
     </div>
   );
 };
-
+ 
 export default ReviewModal;
