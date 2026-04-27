@@ -10,7 +10,7 @@ import TrustCard from './components/TrustCard';
 import ReviewModal from './components/ReviewModal';
 import RegisterModal from './components/RegisterModal';
 import AdminDashboard from './components/AdminDashboard';
-import ReviewsListModal from './components/ReviewsListModal'; // Make sure this is imported!
+import ReviewsListModal from './components/ReviewsListModal';
 
 // --- 1. THE WHATSAPP AVATAR PIN MAKER ---
 const createAvatarIcon = (imageUrl, isVerified) => {
