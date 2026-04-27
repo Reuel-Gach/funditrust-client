@@ -1,56 +1,57 @@
 import { useState, useEffect } from 'react';
 import { Shield, Check, X, Trash2, UserCheck, AlertCircle, Lock, Key } from 'lucide-react';
-
+import { API_URL } from "../config";
+ 
 const AdminDashboard = ({ onClose }) => {
   // 1. SECURITY STATE
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pin, setPin] = useState("");
   const [error, setError] = useState("");
-
+ 
   const [fundis, setFundis] = useState([]);
-
+ 
   // 2. Fetch Logic
   const fetchFundis = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/fundis');
+      const res = await fetch(`${API_URL}/api/fundis`);
       const data = await res.json();
       setFundis(data);
     } catch (err) {
       console.error("Failed to fetch fundis", err);
     }
   };
-
+ 
   useEffect(() => {
     if (isAuthenticated) {
       fetchFundis();
     }
   }, [isAuthenticated]);
-
+ 
   // 3. Verify Logic
   const handleVerify = async (id) => {
     if(!confirm("Are you sure you want to verify this Fundi?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/verify/${id}`, { method: 'PUT' });
+      const res = await fetch(`${API_URL}/api/verify/${id}`, { method: 'PUT' });
       if (res.ok) {
         setFundis(fundis.map(f => f.id === id ? { ...f, verified: true } : f));
       }
     } catch (err) { alert("Action failed"); }
   };
-
+ 
   // 4. DELETE Logic
   const handleDelete = async (id) => {
     const isConfirmed = confirm("⚠️ WARNING: This will permanently delete this Fundi and all their reviews. Are you sure?");
     if (!isConfirmed) return;
-
+ 
     try {
-      const res = await fetch(`http://localhost:5000/api/fundis/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_URL}/api/fundis/${id}`, { method: 'DELETE' });
       if (res.ok) {
         setFundis(fundis.filter(f => f.id !== id)); 
         alert("Fundi has been removed.");
       }
     } catch (err) { alert("Delete failed"); }
   };
-
+ 
   // 5. LOGIN LOGIC (UPDATED)
   const handleLogin = (e) => {
     e.preventDefault();
@@ -62,7 +63,7 @@ const AdminDashboard = ({ onClose }) => {
       setPin("");
     }
   };
-
+ 
   // --- RENDER: THE LOCK SCREEN ---
   if (!isAuthenticated) {
     return (
@@ -96,7 +97,7 @@ const AdminDashboard = ({ onClose }) => {
       </div>
     );
   }
-
+ 
   // --- RENDER: THE DASHBOARD (Unlocked) ---
   return (
     <div className="fixed inset-0 z-[4000] bg-gray-50 flex flex-col font-sans">
@@ -111,7 +112,7 @@ const AdminDashboard = ({ onClose }) => {
           <X size={18} /> Logout
         </button>
       </div>
-
+ 
       {/* Main Table */}
       <div className="p-6 max-w-7xl mx-auto w-full overflow-auto">
         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
@@ -167,5 +168,5 @@ const AdminDashboard = ({ onClose }) => {
     </div>
   );
 };
-
+ 
 export default AdminDashboard;
