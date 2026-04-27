@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { X, Star, User } from 'lucide-react';
-
+import { API_URL } from "../config";
+ 
 const ReviewsListModal = ({ fundi, onClose }) => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-
+ 
   // Fetch reviews when modal opens
   useEffect(() => {
-    fetch(`http://localhost:5000/api/reviews/${fundi.id}`)
+    fetch(`${API_URL}/api/reviews/${fundi.id}`)
       .then(res => res.json())
       .then(data => {
         setReviews(data);
@@ -15,7 +16,7 @@ const ReviewsListModal = ({ fundi, onClose }) => {
       })
       .catch(err => setLoading(false));
   }, [fundi.id]);
-
+ 
   return (
     <div className="fixed inset-0 z-[5000] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       
@@ -35,7 +36,7 @@ const ReviewsListModal = ({ fundi, onClose }) => {
             <X size={20} className="text-gray-500" />
           </button>
         </div>
-
+ 
         {/* The List */}
         <div className="overflow-y-auto p-5 space-y-4">
           
@@ -71,11 +72,11 @@ const ReviewsListModal = ({ fundi, onClose }) => {
               </div>
             ))
           )}
-
+ 
         </div>
       </div>
     </div>
   );
 };
-
+ 
 export default ReviewsListModal;
