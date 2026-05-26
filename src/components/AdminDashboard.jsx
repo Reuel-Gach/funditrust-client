@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Shield, Check, X, Trash2, UserCheck, AlertCircle, Lock, Key } from 'lucide-react';
-import { API_URL } from "../config";
+
  
 const AdminDashboard = ({ onClose }) => {
   // 1. SECURITY STATE
@@ -13,7 +13,7 @@ const AdminDashboard = ({ onClose }) => {
   // 2. Fetch Logic
   const fetchFundis = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/fundis`);
+      const res = await fetch('https://funditrust-api.onrender.com//api/fundis`);
       const data = await res.json();
       setFundis(data);
     } catch (err) {
@@ -31,7 +31,7 @@ const AdminDashboard = ({ onClose }) => {
   const handleVerify = async (id) => {
     if(!confirm("Are you sure you want to verify this Fundi?")) return;
     try {
-      const res = await fetch(`${API_URL}/api/verify/${id}`, { method: 'PUT' });
+      const res = await fetch(https://funditrust-api.onrender.com//api/verify/${id}`, { method: 'PUT' });
       if (res.ok) {
         setFundis(fundis.map(f => f.id === id ? { ...f, verified: true } : f));
       }
@@ -44,7 +44,7 @@ const AdminDashboard = ({ onClose }) => {
     if (!isConfirmed) return;
  
     try {
-      const res = await fetch(`${API_URL}/api/fundis/${id}`, { method: 'DELETE' });
+      const res = await fetch('https://funditrust-api.onrender.com//api/fundis/${id}', { method: 'DELETE' });
       if (res.ok) {
         setFundis(fundis.filter(f => f.id !== id)); 
         alert("Fundi has been removed.");
