@@ -75,7 +75,7 @@ function App() {
   // --- 3. FETCH DATA SAFELY ---
   useEffect(() => {
     // Corrected with true backticks
-    fetch(`${API_URL}/api/fundis`)
+    fetch(`https://funditrust-api.onrender.com/api/fundis`)
       .then(res => {
         if (!res.ok) throw new Error("Network response was not OK");
         return res.json();
