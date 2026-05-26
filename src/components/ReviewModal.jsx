@@ -55,7 +55,7 @@ const ReviewModal = ({ fundi, onClose }) => {
     if (rating === 0) { alert("Please click a star rating!"); return; }
  
     try {
-      const res = await fetch(`${API_URL}/api/reviews/${fundi.id}`, {
+      const res = await fetch(`https://funditrust-api.onrender.com//api/reviews/${fundi.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ rating, comment, mpesaCode })
