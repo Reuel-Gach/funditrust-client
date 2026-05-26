@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, MapPin, User, Phone, Wrench, Camera, Briefcase } from 'lucide-react';
-import { API_URL } from "../config";
+
  
 // THE ULTIMATE KENYAN SERVICES LIST 🇰🇪
 const jobCategories = [
@@ -139,7 +139,7 @@ const RegisterModal = ({ onClose }) => {
     setLoading(true);
  
     try {
-      const res = await fetch(`${API_URL}/api/register`, {
+      const res = await fetch(`https://funditrust-api.onrender.com//api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
