@@ -88,9 +88,16 @@ function App() {
       .catch(err => console.error("Error fetching fundis:", err));
   }, []);
 
-  // --- 4. SAFE FILTER LOGIC ---
+ // --- 4. ULTIMATE SAFE FILTER LOGIC ---
   const visibleFundis = fundis.filter((fundi) => {
-    if (fundi.lat == null || fundi.lng == null) return false;
+    // Force the database values into strict mathematical numbers
+    const latNum = parseFloat(fundi.lat);
+    const lngNum = parseFloat(fundi.lng);
+
+    // 🛑 If it's "null", missing, empty, or invalid, isNaN catches it. Drop this fundi!
+    if (isNaN(latNum) || isNaN(lngNum)) {
+      return false; 
+    }
     
     const query = searchQuery.toLowerCase();
     return (
