@@ -1,1 +1,1 @@
-export const API_URL = "https://funditrust-api.onrender.com";
+export const API_URL = "https://funditrust-api.onrender.com/";
