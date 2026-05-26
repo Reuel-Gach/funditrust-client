@@ -4,7 +4,6 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Shield } from 'lucide-react';
 
-
 // Components
 import TrustCard from './components/TrustCard';
 import ReviewModal from './components/ReviewModal';
@@ -17,11 +16,7 @@ const createAvatarIcon = (imageUrl, isVerified) => {
   return L.divIcon({
     className: "custom-avatar-icon", 
     html: `
-      <div style="
-        position: relative;
-        width: 50px;
-        height: 50px;
-      ">
+      <div style="position: relative; width: 50px; height: 50px;">
         <div style="
           background-image: url('${imageUrl}');
           background-size: cover;
@@ -71,25 +66,35 @@ function App() {
   const [selectedFundi, setSelectedFundi] = useState(null);
   const [isReviewing, setIsReviewing] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
-  const [isReadingReviews, setIsReadingReviews] = useState(false); // New State
+  const [isReadingReviews, setIsReadingReviews] = useState(false); 
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [fundis, setFundis] = useState([]); 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // --- 3. FETCH REAL DATA ---
+  // --- 3. FETCH DATA SAFELY ---
   useEffect(() => {
-    fetch('https://funditrust-api.onrender.com//api/fundis`)
+    // Fixed string quotes and trailing double-slashes
+    fetch(`https://funditrust-api.onrender.com/api/fundis`)
       .then(res => res.json())
-      .then(data => setFundis(data))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setFundis(data);
+        } else {
+          console.error("Data received is not an array:", data);
+        }
+      })
       .catch(err => console.error("Error fetching fundis:", err));
   }, []);
 
-  // --- 4. FILTER LOGIC ---
-  {visibleFundis.filter(f => f.lat != null && f.lng != null).map((fundi) => (
+  // --- 4. SAFE FILTER LOGIC ---
+  // This extracts elements matching search criteria AND filters out null coordinates to prevent Leaflet crashing
+  const visibleFundis = fundis.filter((fundi) => {
+    if (fundi.lat == null || fundi.lng == null) return false;
+    
     const query = searchQuery.toLowerCase();
     return (
-      fundi.name.toLowerCase().includes(query) || 
-      fundi.skill.toLowerCase().includes(query)
+      (fundi.name || "").toLowerCase().includes(query) || 
+      (fundi.skill || "").toLowerCase().includes(query)
     );
   });
 
@@ -111,7 +116,7 @@ function App() {
         {visibleFundis.map((fundi) => (
           <Marker 
             key={fundi.id} 
-            position={[fundi.lat, fundi.lng]} 
+            position={[Number(fundi.lat), Number(fundi.lng)]} 
             icon={createAvatarIcon(
               fundi.image_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${fundi.name}`, 
               fundi.verified
@@ -168,7 +173,7 @@ function App() {
       {/* 2. Admin Dashboard */}
       {isAdminOpen && <AdminDashboard onClose={() => setIsAdminOpen(false)} />}
 
-      {/* 3. Trust Card (Profile) - Handles "Read Reviews" click */}
+      {/* 3. Trust Card (Profile) */}
       {selectedFundi && !isReviewing && !isReadingReviews && (
         <TrustCard 
           fundi={selectedFundi} 
@@ -186,7 +191,7 @@ function App() {
         />
       )}
 
-      {/* 5. Reviews List Modal (NEW) */}
+      {/* 5. Reviews List Modal */}
       {isReadingReviews && selectedFundi && (
         <ReviewsListModal 
           fundi={selectedFundi}
@@ -195,7 +200,7 @@ function App() {
       )}
       
     </div>
-  )
+  );
 }
 
 export default App;
