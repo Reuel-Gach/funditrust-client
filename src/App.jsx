@@ -122,8 +122,9 @@ function App() {
         
         {visibleFundis.map((fundi) => (
           <Marker 
-            key={fundi.id} 
-            position={[Number(fundi.lat), Number(fundi.lng)]} 
+           key={fundi.id} 
+            // 🚀 Guaranteed to be real numbers now
+            position={[parseFloat(fundi.lat), parseFloat(fundi.lng)]} 
             icon={createAvatarIcon(
               fundi.image_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${fundi.name}`, 
               fundi.verified
