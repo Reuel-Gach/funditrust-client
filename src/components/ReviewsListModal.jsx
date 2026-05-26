@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { X, Star, User } from 'lucide-react';
-import { API_URL } from "../config";
+
  
 const ReviewsListModal = ({ fundi, onClose }) => {
   const [reviews, setReviews] = useState([]);
@@ -8,7 +8,7 @@ const ReviewsListModal = ({ fundi, onClose }) => {
  
   // Fetch reviews when modal opens
   useEffect(() => {
-    fetch(`${API_URL}/api/reviews/${fundi.id}`)
+    fetch(`https://funditrust-api.onrender.com//api/reviews/${fundi.id}`)
       .then(res => res.json())
       .then(data => {
         setReviews(data);
