@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Shield } from 'lucide-react';
-import { API_URL } from "./config";
+
 
 // Components
 import TrustCard from './components/TrustCard';
@@ -78,7 +78,7 @@ function App() {
 
   // --- 3. FETCH REAL DATA ---
   useEffect(() => {
-    fetch(`${API_URL}/api/fundis`)
+    fetch(https://funditrust-api.onrender.com//api/fundis`)
       .then(res => res.json())
       .then(data => setFundis(data))
       .catch(err => console.error("Error fetching fundis:", err));
