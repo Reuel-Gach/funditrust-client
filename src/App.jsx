@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Shield } from 'lucide-react';
+import { API_URL } from './config';
 
 // Components
 import TrustCard from './components/TrustCard';
@@ -73,21 +74,21 @@ function App() {
 
   // --- 3. FETCH DATA SAFELY ---
   useEffect(() => {
-    // Fixed string quotes and trailing double-slashes
-    fetch(`https://funditrust-api.onrender.com/api/fundis`)
-      .then(res => res.json())
+    // Corrected with true backticks
+    fetch(`${API_URL}/api/fundis`)
+      .then(res => {
+        if (!res.ok) throw new Error("Network response was not OK");
+        return res.json();
+      })
       .then(data => {
         if (Array.isArray(data)) {
           setFundis(data);
-        } else {
-          console.error("Data received is not an array:", data);
         }
       })
       .catch(err => console.error("Error fetching fundis:", err));
   }, []);
 
   // --- 4. SAFE FILTER LOGIC ---
-  // This extracts elements matching search criteria AND filters out null coordinates to prevent Leaflet crashing
   const visibleFundis = fundis.filter((fundi) => {
     if (fundi.lat == null || fundi.lng == null) return false;
     
@@ -100,7 +101,6 @@ function App() {
 
   return (
     <div className="h-screen w-screen relative font-sans">
-      
       {/* A. MAP LAYER */}
       <MapContainer 
         center={[0.040, 36.370]} 
@@ -166,14 +166,9 @@ function App() {
       </button>
 
       {/* --- E. MODALS --- */}
-
-      {/* 1. Register Modal */}
       {isRegistering && <RegisterModal onClose={() => setIsRegistering(false)} />}
-      
-      {/* 2. Admin Dashboard */}
       {isAdminOpen && <AdminDashboard onClose={() => setIsAdminOpen(false)} />}
 
-      {/* 3. Trust Card (Profile) */}
       {selectedFundi && !isReviewing && !isReadingReviews && (
         <TrustCard 
           fundi={selectedFundi} 
@@ -183,7 +178,6 @@ function App() {
         />
       )}
 
-      {/* 4. Review Modal */}
       {isReviewing && selectedFundi && (
         <ReviewModal 
           fundi={selectedFundi} 
@@ -191,14 +185,12 @@ function App() {
         />
       )}
 
-      {/* 5. Reviews List Modal */}
       {isReadingReviews && selectedFundi && (
         <ReviewsListModal 
           fundi={selectedFundi}
           onClose={() => setIsReadingReviews(false)}
         />
       )}
-      
     </div>
   );
 }
