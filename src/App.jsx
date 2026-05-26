@@ -78,7 +78,7 @@ function App() {
 
   // --- 3. FETCH REAL DATA ---
   useEffect(() => {
-    fetch(https://funditrust-api.onrender.com//api/fundis`)
+    fetch('https://funditrust-api.onrender.com//api/fundis`)
       .then(res => res.json())
       .then(data => setFundis(data))
       .catch(err => console.error("Error fetching fundis:", err));
