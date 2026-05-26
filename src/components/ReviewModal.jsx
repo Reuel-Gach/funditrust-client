@@ -3,7 +3,7 @@ Copy
 
 import { useState } from 'react';
 import { X, Star, CheckCircle, Smartphone, Loader2 } from 'lucide-react';
-import { API_URL } from "../config";
+
  
 const ReviewModal = ({ fundi, onClose }) => {
   const [step, setStep] = useState(1); 
@@ -30,7 +30,7 @@ const ReviewModal = ({ fundi, onClose }) => {
     setPaymentError('');
  
     try {
-      const res = await fetch(`${API_URL}/api/mpesa`, {
+      const res = await fetch(`https://funditrust-api.onrender.com//api/mpesa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone, amount }) // ✅ Sends the typed amount
